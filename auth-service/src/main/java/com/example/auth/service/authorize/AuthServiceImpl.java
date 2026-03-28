@@ -18,6 +18,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Instant;
+
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -34,7 +36,7 @@ public class AuthServiceImpl implements AuthService {
     @Override
     @Transactional
     public AuthResponse register(RegisterRequest request){
-        if(userRepository.findByEmail(request.getEmail()).isPresent()){
+        if(userRepository.existsByEmail(request.getEmail())){
             throw new AuthException("Пользователь уже существует !");
         }
 
@@ -92,8 +94,19 @@ public class AuthServiceImpl implements AuthService {
 
     private AuthResponse buildAuthResponse(User user){
         String accessToken = jwtService.generateAccessToken(user.getId(), user.getRole());
-        String refreshToken = jwtService.generateRefreshToken(user.getEmail());
+        String rawRefreshToken = jwtService.generateRefreshToken(user.getEmail());
 
-        return new AuthResponse(accessToken, refreshToken);
+        RefreshToken refreshToken = RefreshToken.builder()
+                .userId(user.getId())
+                .token(rawRefreshToken)
+                .expiresAt(Instant.now().plusMillis(refreshTokenExpiration))
+                .build();
+
+        refreshTokenRepository.save(refreshToken);
+
+        return AuthResponse.builder()
+                .accessToken(accessToken)
+                .refreshToken(rawRefreshToken)
+                .build();
     }
 }
