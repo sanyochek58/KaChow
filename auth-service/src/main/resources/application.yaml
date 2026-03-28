@@ -20,6 +20,12 @@ springdoc:
   swagger-ui:
     path: /swagger-ui.html
 
+de:
+  flapdoodle:
+    mongodb:
+      embedded:
+        version: 7.0.2
+
 
 
 
