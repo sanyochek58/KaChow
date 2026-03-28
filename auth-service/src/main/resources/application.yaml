@@ -3,15 +3,23 @@ server:
 
 spring:
   application:
-    name: demo
+    name: auth-service
 
   data:
     mongodb:
       uri: ${MONGO_URI:mongodb://localhost:27017/auth-db}
 
 jwt:
-  secret: {}
+  secret: ${JWT_SECRET:iWkCAa6Q1cfrGcdFMvOblcJIkvdZc5Z6UbQgVdWkJlg=}
   access-token-expiration: 900000
   refresh-token-expiration: 604800000
+
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+
+
 
 
