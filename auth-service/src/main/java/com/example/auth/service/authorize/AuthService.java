@@ -7,8 +7,8 @@ import com.example.auth.dto.response.AuthResponse;
 import com.example.auth.exception.AuthException;
 
 public interface AuthService {
-    AuthResponse login(LoginRequest loginRequest) throws AuthException;
-    AuthResponse register(RegisterRequest registerRequest) throws AuthException;
-    AuthResponse refresh(RefreshRequest refreshRequest) throws AuthException;
+    AuthResponse login(LoginRequest loginRequest);
+    AuthResponse register(RegisterRequest registerRequest);
+    AuthResponse refresh(RefreshRequest refreshRequest);
     void logout(String userId);
 }

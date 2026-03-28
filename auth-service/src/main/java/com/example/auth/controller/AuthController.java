@@ -21,25 +21,25 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/register")
-    public ResponseEntity<AuthResponse> register(@Valid @RequestBody RegisterRequest registerRequest) throws AuthException {
+    public ResponseEntity<AuthResponse> register(@Valid @RequestBody RegisterRequest registerRequest){
         AuthResponse authResponse = authService.register(registerRequest);
         return ResponseEntity.ok(authResponse);
     }
 
     @PostMapping("/login")
-    public ResponseEntity<AuthResponse> login(@Valid @RequestBody LoginRequest loginRequest) throws AuthException {
+    public ResponseEntity<AuthResponse> login(@Valid @RequestBody LoginRequest loginRequest){
         AuthResponse authResponse = authService.login(loginRequest);
         return ResponseEntity.ok(authResponse);
     }
 
     @PostMapping("/logout")
-    public ResponseEntity<Map<String, String>> logout(@RequestHeader("X-User-Id") String userId) throws AuthException {
+    public ResponseEntity<Map<String, String>> logout(@RequestHeader("X-User-Id") String userId){
         authService.logout(userId);
         return ResponseEntity.ok(Map.of("message","Успешный выход !"));
     }
 
     @PostMapping("/refresh")
-    public ResponseEntity<AuthResponse> refresh(@Valid @RequestBody RefreshRequest refreshRequest) throws AuthException {
+    public ResponseEntity<AuthResponse> refresh(@Valid @RequestBody RefreshRequest refreshRequest){
         AuthResponse authResponse = authService.refresh(refreshRequest);
         return ResponseEntity.ok(authResponse);
     }
