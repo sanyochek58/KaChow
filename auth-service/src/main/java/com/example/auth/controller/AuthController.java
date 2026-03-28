@@ -4,7 +4,6 @@ import com.example.auth.dto.request.LoginRequest;
 import com.example.auth.dto.request.RefreshRequest;
 import com.example.auth.dto.request.RegisterRequest;
 import com.example.auth.dto.response.AuthResponse;
-import com.example.auth.exception.AuthException;
 import com.example.auth.service.authorize.AuthService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
