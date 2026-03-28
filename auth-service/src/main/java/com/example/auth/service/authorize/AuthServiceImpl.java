@@ -33,7 +33,7 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     @Transactional
-    public AuthResponse register(RegisterRequest request) throws AuthException {
+    public AuthResponse register(RegisterRequest request){
         if(userRepository.findByEmail(request.getEmail()).isPresent()){
             throw new AuthException("Пользователь уже существует !");
         }
@@ -52,7 +52,7 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     @Transactional
-    public AuthResponse login(LoginRequest request) throws AuthException {
+    public AuthResponse login(LoginRequest request){
         User user = userRepository.findByEmail(request.getEmail()).orElseThrow( () ->
                 new AuthException("Пользователь не найден !"));
 
@@ -66,7 +66,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public AuthResponse refresh(RefreshRequest request) throws AuthException {
+    public AuthResponse refresh(RefreshRequest request){
         String refreshToken = request.getRefreshToken();
 
         if(!jwtService.isTokenValid(refreshToken)){
