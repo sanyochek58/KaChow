@@ -1,0 +1,30 @@
+version: '3.8'
+
+services:
+
+  auth-mongo:
+    image: mongo:7.0
+    container_name: auth-mongo
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_DATABASE: auth-db
+    volumes:
+      - auth-mongo-data:/data/db
+
+  auth-service:
+    build:
+      context: ./auth-service
+      dockerfile: Dockerfile
+    container_name: auth-service
+    restart: unless-stopped
+    ports:
+      - "8081:8081"
+    env_file:
+      - .env
+    depends_on:
+      - auth-mongo
+
+volumes:
+  auth-mongo-data:
