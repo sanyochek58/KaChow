@@ -21,7 +21,7 @@ public class DealerServiceImpl implements DealerService {
 
     @Override
     public DealerResponse create(DealerRequest request) {
-        if(dealerRepository.findByName(request.getName()).isPresent()){
+        if(dealerRepository.existsByName(request.getName())){
             throw new DealerException("Автосалон с таким именем уже существует");
         }
 
