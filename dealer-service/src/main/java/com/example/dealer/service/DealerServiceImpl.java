@@ -65,7 +65,7 @@ public class DealerServiceImpl implements DealerService {
     @Override
     public void delete(String id) {
         Dealer dealer = dealerRepository.findById(id).orElseThrow(() -> new DealerException("Автосалона не найден"));
-        dealerRepository.delete(dealer);
+        dealerRepository.deleteById(id);
         log.info("Автосалон удалён: {}", dealer.getName());
     }
 
@@ -84,7 +84,7 @@ public class DealerServiceImpl implements DealerService {
 
     @Override
     public List<DealerResponse> findByCity(String city) {
-        return dealerRepository.findByCity(city).stream().map(this::buildDealerResponse).toList();
+        return dealerRepository.findByCityIgnoreCase(city).stream().map(this::buildDealerResponse).toList();
     }
 
 
