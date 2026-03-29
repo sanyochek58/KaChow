@@ -1,3 +1,22 @@
+server:
+  port: 8082
+
 spring:
   application:
-    name: demo
+    name: dealer-service
+
+  data:
+    mongodb:
+      uri: ${MONGO_URI:mongodb://localhost:27017/dealer-db}
+
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+
+de:
+  flapdoodle:
+    mongodb:
+      embedded:
+        version: 7.0.2
