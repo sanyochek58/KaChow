@@ -16,5 +16,6 @@ public interface DealerRepository extends MongoRepository<Dealer,String> {
 
     List<Dealer> findByCityIgnoreCase(String city);
 
+    void deleteByName(String name);
 
 }
