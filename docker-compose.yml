@@ -13,6 +13,17 @@ services:
     volumes:
       - auth-mongo-data:/data/db
 
+  dealer-mongo:
+    image: mongo:7.0
+    container_name: dealer-mongo
+    restart: unless-stopped
+    ports:
+      - "27018:27017"
+    environment:
+      MONGO_INITDB_DATABASE: dealer-db
+    volumes:
+      - dealer-mongo-data:/data/db
+
   auth-service:
     build:
       context: ./auth-service
@@ -26,5 +37,19 @@ services:
     depends_on:
       - auth-mongo
 
+  dealer-service:
+    build:
+      context: ./dealer-service
+      dockerfile: Dockerfile
+    container_name: dealer-service
+    restart: unless-stopped
+    ports:
+      - "8082:8082"
+    env_file:
+      - .env
+    depends_on:
+      - dealer-mongo
+
 volumes:
   auth-mongo-data:
+  dealer-mongo-data:
