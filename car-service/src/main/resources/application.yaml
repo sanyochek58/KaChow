@@ -1,3 +1,30 @@
+server:
+  port: 8083
+
 spring:
   application:
-    name: demo
+    name: car-service
+
+  data:
+    mongodb:
+      uri: ${MONGO_URI:mongodb://localhost:27017/car-db}
+
+  kafka:
+    bootstrap-servers: ${KAFKA_SERVERS:localhost:9092}
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      properties:
+        spring.json.add.type.headers: false
+
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+
+de:
+  flapdoodle:
+    mongodb:
+      embedded:
+        version: 7.0.2
