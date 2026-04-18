@@ -1,3 +1,36 @@
+server:
+  port: 8080
+
 spring:
   application:
-    name: demo
+    name: api-gateway
+
+  cloud:
+    gateway:
+      routes:
+        # auth-service — публичный, без проверки токена
+        - id: auth-service
+          uri: http://auth-service:8081
+          predicates:
+            - Path=/auth/**
+
+        # dealer-service
+        - id: dealer-service
+          uri: http://dealer-service:8082
+          predicates:
+            - Path=/api/dealer/**
+
+        # car-service
+        - id: car-service
+          uri: http://car-service:8083
+          predicates:
+            - Path=/api/cars/**
+
+        # favourite-service
+        - id: favourite-service
+          uri: http://favourite-service:8084
+          predicates:
+            - Path=/api/favourites/**
+
+jwt:
+  secret: ${JWT_SECRET:iWkCAa6Q1cfrGcdFMvOblcJIkvdZc5Z6UbQgVdWkJlg=}
