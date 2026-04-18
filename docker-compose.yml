@@ -2,6 +2,8 @@ version: '3.8'
 
 services:
 
+  # ─── Databases ────────────────────────────────────────────────────────────────
+
   auth-mongo:
     image: mongo:7.0
     container_name: auth-mongo
@@ -23,6 +25,57 @@ services:
       MONGO_INITDB_DATABASE: dealer-db
     volumes:
       - dealer-mongo-data:/data/db
+
+  car-mongo:
+    image: mongo:7.0
+    container_name: car-mongo
+    restart: unless-stopped
+    ports:
+      - "27019:27017"
+    environment:
+      MONGO_INITDB_DATABASE: car-db
+    volumes:
+      - car-mongo-data:/data/db
+
+  favourite-mongo:
+    image: mongo:7.0
+    container_name: favourite-mongo
+    restart: unless-stopped
+    ports:
+      - "27020:27017"
+    environment:
+      MONGO_INITDB_DATABASE: favourite-db
+    volumes:
+      - favourite-mongo-data:/data/db
+
+  # ─── Kafka ────────────────────────────────────────────────────────────────────
+
+  zookeeper:
+    image: confluentinc/cp-zookeeper:7.6.0
+    container_name: zookeeper
+    restart: unless-stopped
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+
+  kafka:
+    image: confluentinc/cp-kafka:7.6.0
+    container_name: kafka
+    restart: unless-stopped
+    ports:
+      - "9092:9092"
+    depends_on:
+      - zookeeper
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:29092,PLAINTEXT_HOST://localhost:9092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
+
+  # ─── Services ─────────────────────────────────────────────────────────────────
 
   auth-service:
     build:
@@ -50,6 +103,52 @@ services:
     depends_on:
       - dealer-mongo
 
+  car-service:
+    build:
+      context: ./car-service
+      dockerfile: Dockerfile
+    container_name: car-service
+    restart: unless-stopped
+    ports:
+      - "8083:8083"
+    environment:
+      MONGO_URI: mongodb://car-mongo:27017/car-db
+      KAFKA_SERVERS: kafka:29092
+    depends_on:
+      - car-mongo
+      - kafka
+
+  favourite-service:
+    build:
+      context: ./favourite-service
+      dockerfile: Dockerfile
+    container_name: favourite-service
+    restart: unless-stopped
+    ports:
+      - "8084:8084"
+    environment:
+      MONGO_URI: mongodb://favourite-mongo:27017/favourite-db
+    depends_on:
+      - favourite-mongo
+
+  gateway-service:
+    build:
+      context: ./gateway-service
+      dockerfile: Dockerfile
+    container_name: gateway-service
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    env_file:
+      - .env
+    depends_on:
+      - auth-service
+      - dealer-service
+      - car-service
+      - favourite-service
+
 volumes:
   auth-mongo-data:
   dealer-mongo-data:
+  car-mongo-data:
+  favourite-mongo-data:
