@@ -29,4 +29,4 @@ spring:
             - Path=/api/favourites/**
 
 jwt:
-  secret: ${JWT_SECRET:iWkCAa6Q1cfrGcdFMvOblcJIkvdZc5Z6UbQgVdWkJlg=}
+  secret: ${JWT_SECRET}

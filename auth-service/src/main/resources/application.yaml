@@ -7,10 +7,10 @@ spring:
 
   data:
     mongodb:
-      uri: ${MONGO_URI:mongodb://localhost:27017/auth-db}
+      uri: ${AUTH_MONGO_URI:mongodb://localhost:27017/auth-db}
 
 jwt:
-  secret: ${JWT_SECRET:iWkCAa6Q1cfrGcdFMvOblcJIkvdZc5Z6UbQgVdWkJlg=}
+  secret: ${JWT_SECRET}
   access-token-expiration: 900000
   refresh-token-expiration: 604800000
 
