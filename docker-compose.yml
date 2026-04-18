@@ -12,6 +12,8 @@ services:
       - "27017:27017"
     environment:
       MONGO_INITDB_DATABASE: auth-db
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_ROOT_USER}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_ROOT_PASSWORD}
     volumes:
       - auth-mongo-data:/data/db
 
@@ -23,6 +25,8 @@ services:
       - "27018:27017"
     environment:
       MONGO_INITDB_DATABASE: dealer-db
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_ROOT_USER}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_ROOT_PASSWORD}
     volumes:
       - dealer-mongo-data:/data/db
 
@@ -34,6 +38,8 @@ services:
       - "27019:27017"
     environment:
       MONGO_INITDB_DATABASE: car-db
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_ROOT_USER}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_ROOT_PASSWORD}
     volumes:
       - car-mongo-data:/data/db
 
@@ -45,6 +51,8 @@ services:
       - "27020:27017"
     environment:
       MONGO_INITDB_DATABASE: favourite-db
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_ROOT_USER}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_ROOT_PASSWORD}
     volumes:
       - favourite-mongo-data:/data/db
 
@@ -111,9 +119,8 @@ services:
     restart: unless-stopped
     ports:
       - "8083:8083"
-    environment:
-      MONGO_URI: mongodb://car-mongo:27017/car-db
-      KAFKA_SERVERS: kafka:29092
+    env_file:
+      - .env
     depends_on:
       - car-mongo
       - kafka
@@ -126,8 +133,8 @@ services:
     restart: unless-stopped
     ports:
       - "8084:8084"
-    environment:
-      MONGO_URI: mongodb://favourite-mongo:27017/favourite-db
+    env_file:
+      - .env
     depends_on:
       - favourite-mongo
 
