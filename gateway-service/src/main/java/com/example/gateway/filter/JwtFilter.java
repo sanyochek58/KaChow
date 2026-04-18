@@ -22,9 +22,9 @@ public class JwtFilter implements GlobalFilter, Ordered {
     private final JwtUtil jwtUtil;
 
     private static final List<String> PUBLIC_PATHS = List.of(
-            "/auth/register",
-            "/auth/login",
-            "/auth/refresh"
+            "/api/auth/register",
+            "/api/auth/login",
+            "/api/auth/refresh"
     );
 
     @Override

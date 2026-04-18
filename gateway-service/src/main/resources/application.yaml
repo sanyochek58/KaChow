@@ -11,7 +11,7 @@ spring:
         - id: auth-service
           uri: http://auth-service:8081
           predicates:
-            - Path=/auth/**
+            - Path=/api/auth/**
 
         - id: dealer-service
           uri: http://dealer-service:8082
